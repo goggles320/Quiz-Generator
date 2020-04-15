@@ -10,3 +10,5 @@
 - [x] Save name and score
 - [ ] High score page pulling saved data from local storage
 
+See below of a demo/sample of the homework provided:
+![Demo of homework](Demo.gif)
