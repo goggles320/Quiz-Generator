@@ -1,42 +1,220 @@
-<!DOCTYPE html>
-<html lang="en">
+//Start game function
+function setUp()
+{
+    $("#startBtn").removeClass("hide");
+    $("#submitBtn").addClass("hide");
+    $("#backBtn").addClass("hide");
+    $("#scoreBtn").addClass("hide");
+    $("#textArea").text("Try to answer as much questions as possible within the time limit. Any incorrect question will result in a penalty of 5 sec time loss")
+}
+
+//Function that shows first question only
+function showFirstQuestion()
+{
+    i = 0;
+    $("#startBtn").toggle();
+    qText = questionArray[i];
+    console.log(qText)
+    if (qText != null)
+    {
+        //console.log(qText.question)
+        $(".solutions").empty();
+        $(".card-text").text(qText.question);
+        
+        for (var j=0;j<qText.answers.length;j++)
+        {
+            //console.log(qText.answers[j].text)
+            var newBtn = $("<button>");
+            newBtn.addClass("btn-dark btn-primary btn-sm ansBtn");
+            newBtn.text(qText.answers[j].text);
+            newBtn.attr("correct", qText.answers[j].correct);
+            $(".solutions").append(newBtn);
+
+            //Testing New code
+            $(".ansBtn").off("click");
+            
+            //Event Listener for all the buttons
+            $(".ansBtn").on("click",function()
+            {   
+                
+                if($(this).attr("correct")=="true")
+                {
+                    //console.log("test point 2, i =" + i)
+                    $(".card-footer").text("Correct");
+                    score++;
+                    console.log(score)
+                    showNextQuestion();
+                }
+                else
+                {
+                    //console.log("testpoint 3, i =" +i)
+                    $(".card-footer").text("Incorrect");
+                    showNextQuestion();
+                    
+                    secondsLeft = secondsLeft - 5;
+                }
+                    
+            })
+
+            
+        }
+    }
     
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Password Generator</title>
+}
+
+//Function that iterates through the remaining questions
+function showNextQuestion()
+{
+    i++;
+    qText = questionArray[i];
+    if (qText != null)
+    {
+        $(".solutions").empty();
+        $(".card-text").text(qText.question);
+        for (var j=0;j<qText.answers.length;j++)
+        {
+            //console.log(qText.answers[j].text)
+            var newBtn = $("<button>");
+            newBtn.addClass("btn btn-dark btn-primary btn-sm ansBtn");
+            newBtn.text(qText.answers[j].text);
+            newBtn.attr("correct", qText.answers[j].correct);
+            $(".solutions").append(newBtn);
+            //Testing New code
+            $(".ansBtn").off("click");
+            
+            //Event Listener for all the buttons
+            $(".ansBtn").on("click",function()
+            {   
+                
+                if($(this).attr("correct")=="true")
+                {
+                    
+                    $(".card-footer").text("Correct");
+                    score++;
+                    console.log(score)
+                    showNextQuestion();
+                }
+                else
+                {
+                    
+                    $(".card-footer").text("Incorrect");
+                    showNextQuestion();
+                    secondsLeft = secondsLeft - 5;
+                }
+            })
+        }
+    }
+    else
+    {
+        showEnd(score);
+    }
+
+}
+
+
+
+function showEnd(score)
+{   
+    $(".card-title").addClass("hide");
+    $("#textArea").addClass("hide");
+    $(".btn").addClass("hide");
+    $("#backBtn").removeClass("hide");
+    $(".score-title").removeClass("hide");
+    $(".card-footer").addClass("hide");
+    $(".form-group").removeClass("hide");
+    $("#submitBtn").removeClass("hide");
     
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css"/>
-</head>
+    $("#score-text").text(score);
+    //Event Listener for submit button
+    $("#submitBtn").on("click",function()
+    {
+        userName = $("#userInput").val();
+        localStorage.setItem("playerscore", userName + " - " + score + " points");
+    }
+    )
+}
 
-<body>
-    <!--Bootstrap Navigation Bar-->
-    <nav class="navbar navbar-light bg-light flex-wrap">
-        <a class="navbar-brand">View Highscore</a>
-        <p class="text">Timer</p>
-    </nav>
+function setTime() 
+{   
+    secondsLeft = 60;
+    var timerInterval = setInterval(function() 
+    {
+      secondsLeft--;
+      
+      $(".timer-text").text(secondsLeft + " seconds left");
+      //$(".timer-text").attr("value",totalTime);
+      if(secondsLeft === 0) 
+      {
+        clearInterval(timerInterval);
+        showEnd();
+      }
+  
+    }, 1000);
+}
 
-    <!--Container for questions using Card Bootstrap-->
-    <div class="card text-center">
-        <div class="card-body">
-          <h5 class="card-title">Quiz Challenge</h5>
-          <p class="card-text" id="textArea">Questions go here</p>
-          <div class="solutions"></div>
-          <a href="#" class="btn btn-primary" id="startBtn">Start Button</a>
-          <a href="#" class="btn btn-primary" id="submitBtn">Submit</a>
-          <a href="#" class="btn btn-primary" id="backBtn">Go Back</a>
-          <a href="#" class="btn btn-primary" id="scoreBtn">High Score</a>
-        </div>
-        <div class="card-footer text-muted">
-          Correct / Incorrect
-        </div>
-    </div>
+var questionArray = [
+    {
+        question: "A very useful tool used during development and debugging for printing content to the debugger is:",
+        answers: 
+        [
+            {text: "Javascript", correct: false},
+            {text: "Terminal/bash", correct: false},
+            {text: "for loops", correct: false},
+            {text: "console.log", correct: true}
+        ]
+    },
+    {
+        question: "The condition in an if / else statment is enclosed within ________.",
+        answers: 
+        [
+            {text: "Quotes", correct: false},
+            {text: "Curly Brackets", correct: false},
+            {text: "Parentheses", correct: true},
+            {text: "Square Brackets", correct: false}
+        ]
+    },
+    {
+        question: "Arrays in Javascript can be used to store ___________.",
+        answers: 
+        [
+            {text: "Numbers and strings", correct: false},
+            {text: "Other Arrays", correct: false},
+            {text: "Booleans", correct: false},
+            {text: "All of the above", correct: true}
+        ]
+    },
+    {
+        question: "Commonly used data type does not include ____________.",
+        answers: 
+        [
+            {text: "Strings", correct: false},
+            {text: "Booleans", correct: false},
+            {text: "Alerts", correct: true},
+            {text: "Numbers", correct: false}
+        ]
+    },
 
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-<script src="script.js"></script>
-</html>
+];
+
+//Main Body
+setUp();
+var score = 0;
+//Event Listener for starting quiz
+$("#startBtn").on("click",function()
+{
+    
+    setTime();
+    showFirstQuestion();
+    
+   
+})
+
+//Event Listener for High Score Page
+$(".score-title").on("click",function()
+{
+    showEnd(score);
+})
+
+
+
