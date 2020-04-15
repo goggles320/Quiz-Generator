@@ -1,6 +1,7 @@
 //Start game function
 function setUp()
-{
+{   
+    //Hide/unhide the required buttons/items 
     $("#startBtn").removeClass("hide");
     $("#submitBtn").addClass("hide");
     $("#backBtn").addClass("hide");
@@ -12,45 +13,46 @@ function setUp()
 function showFirstQuestion()
 {
     i = 0;
+    //Hide the start button
     $("#startBtn").toggle();
     qText = questionArray[i];
-    console.log(qText)
+    //Error check to make sure array has "data"
     if (qText != null)
     {
-        //console.log(qText.question)
+        //Empty the solutions area & append question to page
         $(".solutions").empty();
         $(".card-text").text(qText.question);
-        
+        //Iterate through array that contains the possible solutions
         for (var j=0;j<qText.answers.length;j++)
         {
-            //console.log(qText.answers[j].text)
+            //Create buttons which has the possible solutions
             var newBtn = $("<button>");
             newBtn.addClass("btn-dark btn-primary btn-sm ansBtn");
             newBtn.text(qText.answers[j].text);
             newBtn.attr("correct", qText.answers[j].correct);
             $(".solutions").append(newBtn);
 
-            //Testing New code
+            //clear all existing click data from buttons
             $(".ansBtn").off("click");
             
             //Event Listener for all the buttons
             $(".ansBtn").on("click",function()
             {   
-                
+                //When selected answer is true...
                 if($(this).attr("correct")=="true")
                 {
-                    //console.log("test point 2, i =" + i)
+                    //Display correct in footer, increase score by 1
                     $(".card-footer").text("Correct");
                     score++;
-                    console.log(score)
+                    //Show next set of questions
                     showNextQuestion();
                 }
                 else
                 {
-                    //console.log("testpoint 3, i =" +i)
+                    //Footer shows incorrect, show new questions
                     $(".card-footer").text("Incorrect");
                     showNextQuestion();
-                    
+                    //Reduce time by 5 seconds
                     secondsLeft = secondsLeft - 5;
                 }
                     
@@ -65,21 +67,24 @@ function showFirstQuestion()
 //Function that iterates through the remaining questions
 function showNextQuestion()
 {
+    //Increase question counter by 1
     i++;
     qText = questionArray[i];
+    //Chec that current index in array has data
     if (qText != null)
     {
+        //Same as above function showQuestion()
         $(".solutions").empty();
         $(".card-text").text(qText.question);
         for (var j=0;j<qText.answers.length;j++)
         {
-            //console.log(qText.answers[j].text)
+            
             var newBtn = $("<button>");
             newBtn.addClass("btn btn-dark btn-primary btn-sm ansBtn");
             newBtn.text(qText.answers[j].text);
             newBtn.attr("correct", qText.answers[j].correct);
             $(".solutions").append(newBtn);
-            //Testing New code
+            
             $(".ansBtn").off("click");
             
             //Event Listener for all the buttons
@@ -91,7 +96,7 @@ function showNextQuestion()
                     
                     $(".card-footer").text("Correct");
                     score++;
-                    console.log(score)
+                    
                     showNextQuestion();
                 }
                 else
@@ -105,14 +110,15 @@ function showNextQuestion()
         }
     }
     else
-    {
+    {   
+        //If array has no data, show end of page
         showEnd(score);
     }
 
 }
 
 
-
+//Function show shows end of page and hides all required buttons/items
 function showEnd(score)
 {   
     $(".card-title").addClass("hide");
@@ -123,17 +129,19 @@ function showEnd(score)
     $(".card-footer").addClass("hide");
     $(".form-group").removeClass("hide");
     $("#submitBtn").removeClass("hide");
-    
+    //Displays player score on page
     $("#score-text").text(score);
     //Event Listener for submit button
     $("#submitBtn").on("click",function()
     {
+        //Saves user inputted name with score onto local storage
         userName = $("#userInput").val();
         localStorage.setItem("playerscore", userName + " - " + score + " points");
     }
     )
 }
 
+//Function for timer/counter
 function setTime() 
 {   
     secondsLeft = 60;
@@ -142,7 +150,7 @@ function setTime()
       secondsLeft--;
       
       $(".timer-text").text(secondsLeft + " seconds left");
-      //$(".timer-text").attr("value",totalTime);
+      
       if(secondsLeft === 0) 
       {
         clearInterval(timerInterval);
