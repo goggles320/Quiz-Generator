@@ -1,0 +1,82 @@
+body {
+    background-color:lightgray;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+h5, p, title, .card-text
+{
+    font-family: 'Open Sans', sans-serif;
+}
+/* Navigation Bar Styling*/
+.navbar-dark 
+{
+    background-color: black;
+    padding-bottom: 15px;
+    
+}
+.text
+{
+    margin-top:10px;
+    margin-bottom:0px;
+}
+
+#text-area
+{
+    height: 10px;
+}
+
+.navbar-brand {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 15px;
+}
+
+/*Button styling */
+.btn-dark {
+    border-radius: 0px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 0px;
+    padding: 10px 20px;
+    margin: 25px 10px 0px 10px;
+}
+
+.hide {
+    display: none;
+  }
+
+form
+{
+    margin-left:186px;
+    width: 762px;
+}  
+
+/*Footer Styling*/
+.card-footer
+{
+    margin-top: 50px;
+}
+
+/* Main page element styling - xs */
+@media only screen and (max-width: 575px) {
+    .card-body .form-container
+    {
+      padding: 40px;
+      margin-top: 0px;
+    }
+    .navbar-dark 
+    {
+      background-color: gray;
+      margin-top: 20px;
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    .card-body .form-container 
+    {
+      font-size: 14px;
+    }
+  }
